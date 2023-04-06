@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "skin"
+version = "0.0.1"
+description = "Light-weight Python ORM"
+authors = ["Vladimir Minev <minev.dev@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

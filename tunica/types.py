@@ -20,16 +20,16 @@ class StringType(str):
         """
         v_len = len(v)
 
-        length = field.type_.length
+        length = field.type_.max_length
         if v_len > length:
             raise errors.PydanticValueError(limit_value=length)
 
         return v
 
 
-def _string(length: int) -> Type:
+def _string(max_length: int) -> Type:
     # use kwargs then define conf in a dict to aid with IDE type hinting
-    namespace = dict(length=length)
+    namespace = dict(max_length=max_length)
 
     return type("StringField", (StringType,), namespace)
 

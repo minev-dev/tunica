@@ -5,13 +5,13 @@ import tunica
 
 
 class User(pydantic.BaseModel):
-    name: tunica.String(length=5)
+    name: tunica.String(max_length=5)
 
 
 def test_string():
-    string_type = tunica.String(length=10)
+    string_type = tunica.String(max_length=10)
 
-    assert hasattr(string_type, "length")
+    assert hasattr(string_type, "max_length")
 
 
 def test_string_length_validator_failed():

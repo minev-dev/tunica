@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "jacket"
+name = "tunica"
 version = "0.0.1"
 description = "Light-weight Python ORM"
 authors = ["Vladimir Minev <minev.dev@gmail.com>"]

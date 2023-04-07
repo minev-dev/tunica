@@ -1,8 +1,8 @@
-# Jacket
+# Tunica
 
 Light-weight Python ORM.
 
-"Wear a Jacket on your low-level code"
+"Wear a Tunica on your low-level code"
 
 Builtin features:
 * ORM

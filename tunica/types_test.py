@@ -5,11 +5,11 @@ import tunica
 
 
 class User(pydantic.BaseModel):
-    name: tunica.String(max_length=5)
+    name: tunica.String(name="", primary_key=False, max_length=5)
 
 
 def test_string():
-    string_type = tunica.String(max_length=10)
+    string_type = tunica.String(name="", primary_key=False, max_length=5)
 
     assert hasattr(string_type, "max_length")
 

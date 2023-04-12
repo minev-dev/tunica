@@ -1,10 +1,35 @@
+"""Tunica ORM field types
+
+Each field type consist of:
+1) Class with pydantic validators
+2) Wrapper for the class with supported named args
+"""
 from pydantic.types import Type
 from pydantic.types import errors
 
 
-class StringType(str):
-    length: int
+class _BaseWrapper:
+    """Wrapper for a custom pydantic field type"""
 
+    def __init__(self, klass: Type):
+        self._klass = klass
+
+    def __call__(self, name: str, primary_key: bool) -> Type:
+        """Defines supported params for the field
+
+        Args:
+            name: Column name
+            primary_key: If this field is a primary key
+
+        Returns:
+            New type with custom namespace and base class that was set in `__init__`
+        """
+        namespace = dict(name=name, primary_key=primary_key)
+
+        return type(self._klass.__name__, (self._klass,), namespace)
+
+
+class _String(str):
     @classmethod
     def __get_validators__(cls):
         """Returns validators applied to this type"""
@@ -27,11 +52,25 @@ class StringType(str):
         return v
 
 
-def _string(max_length: int) -> Type:
-    # use kwargs then define conf in a dict to aid with IDE type hinting
-    namespace = dict(max_length=max_length)
+class _StringWrapper(_BaseWrapper):
+    def __call__(self, name: str, primary_key: bool, max_length: int) -> Type:
+        """Overrides base method to add extra String-specific args
 
-    return type("StringField", (StringType,), namespace)
+        Args:
+            max_length: Max length of the string in a db
+
+        Returns:
+            Modified type returned from the parent
+        """
+        type_ = super().__call__(name, primary_key)
+
+        namespace = dict(max_length=max_length)
+
+        for k, v in namespace.items():
+            setattr(type_, k, v)
+
+        return type_
 
 
-String = _string
+# Put all public types here
+String = _StringWrapper(_String)

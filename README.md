@@ -4,6 +4,38 @@ Light-weight Python ORM.
 
 "Wear a Tunica on your low-level code"
 
+## Installation
+
+```commandline
+pip install tunica
+```
+
+## Basic usage
+
+```python
+import tunica
+
+class User(tunica.Model):
+    id: tunica.UUID(primary_key=True)
+
+    first_name: tunica.String(max_length=32)
+    last_name: tunica.String(max_length=32)
+
+# Creates table
+User.create()
+
+# Create users
+user_1 = User(first_name="John", last_name="Smith", save=True)
+user_2 = User(first_name="Harry", last_name="Potter", save=True)
+
+# Get all users
+users = User.all()
+```
+
+TODO:
+* Base sql request `Model.all()`
+* Base migration
+
 Builtin features:
 * ORM
   * Use [pydantic](https://github.com/pydantic/pydantic) models

@@ -36,6 +36,9 @@ users = User.all()
 
 TODO:
 
+* Base migration (manual creation):
+  * Create table
+  * Change table
 * Base sql request `Model.all()`
 * Base migration
 

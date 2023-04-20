@@ -9,8 +9,10 @@ class User(pydantic.BaseModel):
 
 
 def test_string():
-    string_type = tunica.String(name="", primary_key=False, max_length=5)
+    string_type = tunica.String(name="Some name", primary_key=False, max_length=5)
 
+    assert hasattr(string_type, "name")
+    assert hasattr(string_type, "primary_key")
     assert hasattr(string_type, "max_length")
 
 

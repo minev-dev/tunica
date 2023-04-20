@@ -29,14 +29,20 @@ class _BaseWrapper:
         return type(self._klass.__name__, (self._klass,), namespace)
 
 
-class _String(str):
+class Field:
+    """Class-marker for fields implementations"""
+
+    pass
+
+
+class _String(str, Field):
     @classmethod
     def __get_validators__(cls):
         """Returns validators applied to this type"""
-        yield cls.str_length_validator
+        yield cls._str_length_validator
 
     @classmethod
-    def str_length_validator(
+    def _str_length_validator(
         cls, v: "StrBytes", field: "ModelField", config: "BaseConfig"
     ) -> "StrBytes":
         """Custom validator for length checks

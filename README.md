@@ -46,6 +46,7 @@ Builtin features:
 
 * ORM
     * Use [pydantic](https://github.com/pydantic/pydantic) models
+      * Native `pydantic` validation. Use models as DTO, serializers
     * Simple query builder:
         * `Model.all()`
         * `Model.filter(TODO).first()`

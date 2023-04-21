@@ -34,13 +34,12 @@ user_2 = User(first_name="Harry", last_name="Potter", save=True)
 users = User.all()
 ```
 
-TODO:
+Priorities:
 
-* Base migration (manual creation):
-  * Create table
-  * Change table
-* Base sql request `Model.all()`
-* Base migration
+* Query builder:
+  * How to store query structure
+  * How to build sql upon the structure
+* Base migration (create, alter table)
 
 Builtin features:
 

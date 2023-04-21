@@ -4,7 +4,7 @@ import pytest
 import tunica
 
 
-class User(pydantic.BaseModel):
+class User(tunica.Model):
     name: tunica.String(name="", primary_key=False, max_length=5)
 
 

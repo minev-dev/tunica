@@ -8,6 +8,43 @@ import pydantic
 class Model(pydantic.BaseModel):
     """Base table model
 
+    Supported methods:
+    - Create - `Model(..fields..).save()`
+    - Read:
+        1) All:
+            ```
+            Model.all()
+            ```
+        2) One:
+            ```
+            Model.get(id=123)
+            or
+            Model.filter(id=123).first()
+            ```
+    - Update:
+        1) Get and update:
+            ```
+            instance = Model.get()
+            instance.name = "new name"
+            instance.save()
+            ```
+        2) Update statement:
+            ```
+            Model.filter(..conditions..).update(name="new name")
+            ```
+    - Delete:
+        1) Should be filtered first:
+            ```
+            Model.filter(..conditions..).delete()
+            ```
+        2) One:
+            ```
+            instance = Model.get(id=123)
+            instance.delete()
+            ```
+
+
+
     TODO:
         How to allow at the same time:
         - Model creation for validation

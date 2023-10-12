@@ -67,7 +67,7 @@ class Model(pydantic.BaseModel):
     """
 
     @classmethod
-    def filter(cls, **kwargs):
+    def filter(cls, **kwargs) -> Query:
         return cls._create_query().filter(**kwargs)
 
     @classmethod
@@ -91,22 +91,22 @@ class Query:
         return self
 
     # Finishing methods
-    def create(self):
+    def create(self, **kwargs) -> Model:
         pass
 
-    def get(self):
+    def first(self) -> Model | None:
         pass
 
-    def all(self):
+    def last(self) -> Model | None:
         pass
 
-    def first(self):
+    def all(self) -> list[Model]:
         pass
 
-    def update(self):
+    def update(self, **kwargs) -> int:
         pass
 
-    def delete(self):
+    def delete(self) -> int:
         pass
 
     def count(self) -> int:

@@ -4,17 +4,20 @@ Each field type consist of:
 1) Class with pydantic validators
 2) Wrapper for the class with supported named args
 """
-from pydantic.types import Type
-from pydantic.types import errors
+from typing import Any
+
+import pydantic
+import pydantic_core
+from pydantic_core import core_schema
 
 
 class _BaseWrapper:
     """Wrapper for a custom pydantic field type"""
 
-    def __init__(self, klass: Type):
-        self._klass = klass
+    def __init__(self, class_):
+        self._class = class_
 
-    def __call__(self, name: str, primary_key: bool) -> Type:
+    def __call__(self, name: str, primary_key: bool):
         """Defines supported params for the field
 
         Args:
@@ -26,7 +29,7 @@ class _BaseWrapper:
         """
         namespace = dict(name=name, primary_key=primary_key)
 
-        return type(self._klass.__name__, (self._klass,), namespace)
+        return type(self._class.__name__, (self._class,), namespace)
 
 
 class Field:
@@ -35,31 +38,37 @@ class Field:
     pass
 
 
-class _String(str, Field):
-    @classmethod
-    def __get_validators__(cls):
-        """Returns validators applied to this type"""
-        yield cls._str_length_validator
+class _String:
+    """Custom type that stores the field it was used in."""
+
+    def __init__(self, value: str, field_name: str):
+        self.value = value
+        self.field_name = field_name
+
+    def __repr__(self):
+        return f"String<{self.value} {self.field_name!r}>"
 
     @classmethod
-    def _str_length_validator(
-        cls, v: "StrBytes", field: "ModelField", config: "BaseConfig"
-    ) -> "StrBytes":
-        """Custom validator for length checks
+    def validate(cls, value: str, info: pydantic.ValidationInfo):
+        value_len = len(value)
 
-        TODO: Update typing
-        """
-        v_len = len(v)
+        if value_len > cls.max_length:
+            # TODO: Raise correct error
+            raise pydantic_core.PydanticCustomError("length", "Wrong length")
 
-        length = field.type_.max_length
-        if v_len > length:
-            raise errors.PydanticValueError(limit_value=length)
+        return cls(value, info.field_name)
 
-        return v
+    @classmethod
+    def __get_pydantic_core_schema__(
+        cls, source_type: Any, handler: pydantic.GetCoreSchemaHandler
+    ) -> core_schema.CoreSchema:
+        return core_schema.with_info_after_validator_function(
+            cls.validate, handler(str), field_name=handler.field_name
+        )
 
 
 class _StringWrapper(_BaseWrapper):
-    def __call__(self, name: str, primary_key: bool, max_length: int) -> Type:
+    def __call__(self, name: str, primary_key: bool, max_length: int):
         """Overrides base method to add extra String-specific args
 
         Args:

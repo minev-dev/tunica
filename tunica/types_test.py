@@ -19,3 +19,10 @@ def test_string():
 def test_string_length_validator_failed():
     with pytest.raises(pydantic.ValidationError):
         _ = User(name="123456")
+
+
+# Failing
+def test_dict():
+    user = User(name="1234")
+
+    print(user.model_dump(mode="json"))
